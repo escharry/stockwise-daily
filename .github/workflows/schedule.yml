@@ -1,6 +1,7 @@
 name: Send Daily Email
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '*/10 * * * *'  # This will run the action every 10 minutes. Adjust as needed.
 
@@ -15,7 +16,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.8'  # Specify your Python version here.
+        python-version: '3.13.0'  # Specify your Python version here.
 
     - name: Install dependencies
       run: |
