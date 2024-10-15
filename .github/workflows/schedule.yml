@@ -7,6 +7,7 @@ on:
 
 jobs:
   send_email:
+    environment: email-env
     runs-on: ubuntu-latest
 
     steps:
