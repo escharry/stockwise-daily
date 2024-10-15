@@ -17,8 +17,6 @@ def send_email(subject: str, body: str) -> None:
         "smtp_port": 587,  # Use TLS
     }
 
-    print(f"Sending email from {EMAIL_CREDENTIALS['sender']} to {
-          EMAIL_CREDENTIALS['recipient']}")
     # Create the email message
     msg = MIMEMultipart()
     msg['From'] = EMAIL_CREDENTIALS['sender']
