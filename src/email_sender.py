@@ -1,27 +1,22 @@
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from dotenv import load_dotenv
 import os
 
 # Function to send an email
-
-load_dotenv()
 
 
 def send_email(subject: str, body: str) -> None:
     """Sends an email with the given subject and body."""
     EMAIL_CREDENTIALS = {
         # Get email from environment variable
-        "sender": os.environ["EMAIL_USERNAME"],
-        "recipient": os.environ["EMAIL_RECIPIENT"],
-        "password": os.environ["EMAIL_PASSWORD"],
+        "sender": os.getenv("EMAIL_USERNAME"),
+        "recipient": os.getenv("EMAIL_RECIPIENT"),
+        "password": os.getenv("EMAIL_PASSWORD"),
         "smtp_server": "smtp.gmail.com",  # Use your SMTP server
         "smtp_port": 587,  # Use TLS
     }
 
-    print(f"Sending email from {EMAIL_CREDENTIALS['sender']} to {
-          EMAIL_CREDENTIALS['recipient']}")
     # Create the email message
     msg = MIMEMultipart()
     msg['From'] = EMAIL_CREDENTIALS['sender']
