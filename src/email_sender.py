@@ -7,17 +7,15 @@ import os
 # Function to send an email
 
 load_dotenv()
-email_username = os.getenv("EMAIL_USERNAME")
-email_password = os.getenv("EMAIL_PASSWORD")
-email_recipient = os.getenv("EMAIL_RECIPIENT")
 
 
 def send_email(subject: str, body: str) -> None:
     """Sends an email with the given subject and body."""
     EMAIL_CREDENTIALS = {
         # Get email from environment variable
-        "sender": email_username,
-        "recipient": email_recipient,  # Replace with your recipient email
+        "sender": os.getenv("EMAIL_USERNAME"),
+        "recipient": os.getenv("EMAIL_RECIPIENT"),
+        "password": os.getenv("EMAIL_PASSWORD"),
         "smtp_server": "smtp.gmail.com",  # Use your SMTP server
         "smtp_port": 587,  # Use TLS
     }
@@ -35,7 +33,7 @@ def send_email(subject: str, body: str) -> None:
             server.starttls()  # Secure the connection
             # Login using the environment variable for the password
             server.login(EMAIL_CREDENTIALS['sender'],
-                         email_password)
+                         EMAIL_CREDENTIALS['password'])
             server.sendmail(
                 EMAIL_CREDENTIALS['sender'], EMAIL_CREDENTIALS['recipient'], msg.as_string())
             print("Email sent successfully!")
