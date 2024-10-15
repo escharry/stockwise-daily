@@ -2,6 +2,8 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import os
+from news import fetch_news
+from stocks import fetch_stock_data
 
 # Function to send an email
 
