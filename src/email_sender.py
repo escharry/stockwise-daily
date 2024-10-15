@@ -7,6 +7,9 @@ import os
 # Function to send an email
 
 load_dotenv()
+print(os.getenv("EMAIL_USERNAME"))
+print(os.getenv("EMAIL_RECIPIENT"))
+print(os.getenv("EMAIL_PASSWORD"))
 
 
 def send_email(subject: str, body: str) -> None:
