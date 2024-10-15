@@ -28,4 +28,4 @@ jobs:
         EMAIL_USERNAME: ${{ secrets.EMAIL_USERNAME }}
         EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
         EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}
-      run: python email_sender.py
+      run: python src/email_sender.py
