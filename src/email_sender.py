@@ -13,9 +13,9 @@ def send_email(subject: str, body: str) -> None:
     """Sends an email with the given subject and body."""
     EMAIL_CREDENTIALS = {
         # Get email from environment variable
-        "sender": os.environ("EMAIL_USERNAME"),
-        "recipient": os.environ("EMAIL_RECIPIENT"),
-        "password": os.environ("EMAIL_PASSWORD"),
+        "sender": os.environ["EMAIL_USERNAME"],
+        "recipient": os.environ["EMAIL_RECIPIENT"],
+        "password": os.environ["EMAIL_PASSWORD"],
         "smtp_server": "smtp.gmail.com",  # Use your SMTP server
         "smtp_port": 587,  # Use TLS
     }
