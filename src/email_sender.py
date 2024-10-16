@@ -58,6 +58,9 @@ def create_email_content() -> tuple:
                 if key == 'source':
                     body_element += f"<li><strong>{key}:</strong> {
                         stock_news_json[key]['name']}</li>"
+                elif key == 'urlToImage':
+                    body_element += f"<li><strong>{key}:</strong> <img src='{
+                        stock_news_json[key]}' alt='News Image' width='200'></li>"
                 else:
                     body_element += f"<li><strong>{
                         key}:</strong> {stock_news_json[key]}</li>"
@@ -73,14 +76,17 @@ def create_email_content() -> tuple:
             <h3>Related News:</h3>
             <ul>
             """
-            for news in stock_news_json:  # Assuming stock_news_json is a list of news articles
-                if 'urlToImage' in news:  # Check if the urlToImage field exists
-                    image_url = news['urlToImage']
-                    body_element += f"<li><strong>{news['title']}</strong><br><img src='{
-                        image_url}' alt='News Image' width='200'><br>{news['description']}<br><a href='{news['url']}'>Read more</a></li>"
+            for key in stock_news_json:  # Assuming stock_news_json is a list of news articles
+                if key == 'source':  # Check if the source field exists
+                    body_element += f"<li><strong>{key}:</strong> {
+                        stock_news_json[key]['name']}</li>"
+                elif key == 'urlToImage':  # Check if the urlToImage field exists
+                    image_url = stock_news_json[key]
+                    body_element += f"<li><strong>{key}:</strong> <img src='{
+                        image_url}' alt='News Image' width='200'></li>"
                 else:
-                    body_element += f"<li><strong>{news['title']}</strong><br>{
-                        news['description']}<br><a href='{news['url']}'>Read more</a></li>"
+                    body_element += f"<li><strong>{
+                        key}:</strong> {stock_news_json[key]}</li>"
 
             body_element += "</ul><hr>"
             body.append(body_element)
