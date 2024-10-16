@@ -65,24 +65,28 @@ def create_email_content() -> tuple:
 
         # Always add the news section
         body_element += "<h3>Related News:</h3><ul>"
-        image_added = False  # To track if we've added an image
 
-        for news in stock_news_json:  # Assuming stock_news_json is a list of news articles
-            body_element += f"<li><strong>{news['title']}</strong><br>"
-            body_element += f"<p>{news['description']
-                                  }<br><a href='{news['url']}'>Read more</a></p></li>"
-
-            # Check for an image in the current news item
-            if 'urlToImage' in news and not image_added:  # Only add the first image found
-                image_url = news['urlToImage']
-                body_element += f"""
-                <div style='text-align: center;'>
-                    <img src='{image_url}' alt='News Image' width='200' style='border-radius: 5px;'>
-                </div>
-                """
-                image_added = True  # Mark that we've added an image
+        # Construct news information
+        for key in stock_news_json:
+            # Assuming stock_news_json contains fields like 'source', 'author', 'title', etc.
+            if key == 'source':
+                body_element += f"<li><strong>{key.capitalize()}:</strong> {
+                    stock_news_json[key]['name']}</li>"
+            elif key in ['author', 'title', 'description', 'url', 'publishedAt', 'content']:
+                body_element += f"<li><strong>{key.capitalize()}:</strong> {
+                    stock_news_json[key]}</li>"
 
         body_element += "</ul>"
+
+        # Check for the image in stock_news_json and place it at the bottom
+        if 'urlToImage' in stock_news_json:
+            image_url = stock_news_json['urlToImage']
+            body_element += f"""
+            <div style='text-align: center;'>
+                <img src='{image_url}' alt='News Image' width='200' style='border-radius: 10px;'>
+            </div>
+            """
+
         body_element += "<hr>"
         body.append(body_element)
 
