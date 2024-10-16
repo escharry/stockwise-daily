@@ -22,7 +22,7 @@ def send_email(subject: str, body: str):
     msg['From'] = EMAIL_CREDENTIALS['sender']
     msg['To'] = EMAIL_CREDENTIALS['recipient']
     msg['Subject'] = subject
-    msg.attach(MIMEText(body, 'plain'))
+    msg.attach(MIMEText(body, 'html'))  # Attach as HTML content
 
     try:
         with smtplib.SMTP(EMAIL_CREDENTIALS['smtp_server'], EMAIL_CREDENTIALS['smtp_port']) as server:
@@ -37,45 +37,55 @@ def send_email(subject: str, body: str):
 
 
 def create_email_content() -> tuple:
-    """Creates the content for the email to be sent in plain text."""
+    """Creates the content for the email to be sent in HTML format."""
     subject = "Daily Stock Market Update 🎉"
     body = []
 
     stocks_api_key = os.getenv('ALPHA_VANTAGE_API_KEY')
     news_api_key = os.getenv('NEWS_API_KEY')
 
-    print('API Keys:', stocks_api_key, news_api_key)
+    body.append("<html><body>")
+    body.append("<h1>Daily Stock Market Update 🎉</h1>")
+    body.append("<hr>")
 
     for stock_symbol in stock_symbols:
-        stock_data = fetch_stock_data(
-            stock_symbol, stocks_api_key)
+        stock_data = fetch_stock_data(stock_symbol, stocks_api_key)
         stock_news_json = fetch_news(stock_symbol, news_api_key)
 
         if not stock_data:
-            body_element = f"Error fetching data for {stock_symbol}\n"
+            body_element = f"<h2>Error fetching data for {stock_symbol}</h2>"
+            body_element += "<ul>"
             for key in stock_news_json:
                 if key == 'source':
-                    body_element += f"{key}: {stock_news_json[key]['name']}\n"
+                    body_element += f"<li><strong>{key}:</strong> {
+                        stock_news_json[key]['name']}</li>"
                 else:
-                    body_element += f"{key}: {stock_news_json[key]}\n"
-            body.append(body_element + "\n")
+                    body_element += f"<li><strong>{
+                        key}:</strong> {stock_news_json[key]}</li>"
+            body_element += "</ul><hr>"
+            body.append(body_element)
         else:
             body_element = f"""
-            {stock_data['01. symbol']}:
-            Open: {stock_data['02. open']}
-            Price: {stock_data['05. price']}
-            Change: {stock_data['09. change']} (
-                {stock_data['10. change percent']})
+            <h2>{stock_data['01. symbol']}</h2>
+            <p><strong>Open:</strong> {stock_data['02. open']}<br>
+            <strong>Price:</strong> {stock_data['05. price']}<br>
+            <strong>Change:</strong> {stock_data['09. change']} (
+            {stock_data['10. change percent']})</p>
 
-            Related News:
+            <h3>Related News:</h3>
+            <ul>
             """
             for key in stock_news_json:
                 if key == 'source':
-                    body_element += f"{key}: {stock_news_json[key]['name']}\n"
+                    body_element += f"<li><strong>{key}:</strong> {
+                        stock_news_json[key]['name']}</li>"
                 else:
-                    body_element += f"{key}: {stock_news_json[key]}\n"
-            body.append(body_element + "\n")
+                    body_element += f"<li><strong>{
+                        key}:</strong> {stock_news_json[key]}</li>"
+            body_element += "</ul><hr>"
+            body.append(body_element)
 
+    body.append("</body></html>")
     body_string = "".join(body)
     return subject, body_string
 
