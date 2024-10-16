@@ -59,8 +59,8 @@ def create_email_content() -> tuple:
             body_element += "<p>Error fetching stock data.</p>"
         else:
             body_element += f"""
-            <div style='display: flex; align-items: center;'>
-                <div style='flex: 1;'>
+            <div style='display: flex; justify-content: space-between; align-items: center;'>
+                <div style='flex-grow: 1;'>
                     <p><strong>Open:</strong> {stock_data['02. open']}<br>
                     <strong>Price:</strong> {stock_data['05. price']}<br>
                     <strong>Change:</strong> {stock_data['09. change']} ({stock_data['10. change percent']})</p>
@@ -71,7 +71,7 @@ def create_email_content() -> tuple:
             if 'urlToImage' in stock_news_json:
                 image_url = stock_news_json['urlToImage']
                 body_element += f"""
-                <div style='margin-left: 20px;'>
+                <div style='flex-grow: 1; text-align: right;'>
                     <img src='{image_url}' alt='News Image' width='200' style='border-radius: 10px;'>
                 </div>
                 """
