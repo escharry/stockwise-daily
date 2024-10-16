@@ -41,10 +41,15 @@ def create_email_content() -> tuple:
     subject = "Daily Stock Market Update 🎉"
     body = []
 
+    stocks_api_key = os.getenv('ALPHA_VANTAGE_API_KEY')
+    news_api_key = os.getenv('NEWS_API_KEY')
+
+    print('API Keys:', stocks_api_key, news_api_key)
+
     for stock_symbol in stock_symbols:
         stock_data = fetch_stock_data(
-            stock_symbol, os.getenv('ALPHA_VANTAGE_API_KEY'))
-        stock_news_json = fetch_news(stock_symbol, os.getenv('NEWS_API_KEY'))
+            stock_symbol, stocks_api_key)
+        stock_news_json = fetch_news(stock_symbol, news_api_key)
 
         if not stock_data:
             body_element = f"Error fetching data for {stock_symbol}\n"
