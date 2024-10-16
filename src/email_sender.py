@@ -51,24 +51,38 @@ def create_email_content() -> tuple:
         stock_data = fetch_stock_data(stock_symbol, stocks_api_key)
         stock_news_json = fetch_news(stock_symbol, news_api_key)
 
+        # Start the stock info box
         body_element = f"<h2>{stock_symbol}</h2>"
 
-        # Add stock data or error message
+        # Prepare stock data or error message
         if not stock_data:
             body_element += "<p>Error fetching stock data.</p>"
         else:
             body_element += f"""
-            <p><strong>Open:</strong> {stock_data['02. open']}<br>
-            <strong>Price:</strong> {stock_data['05. price']}<br>
-            <strong>Change:</strong> {stock_data['09. change']} ({stock_data['10. change percent']})</p>
+            <div style='display: flex; align-items: center;'>
+                <div style='flex: 1;'>
+                    <p><strong>Open:</strong> {stock_data['02. open']}<br>
+                    <strong>Price:</strong> {stock_data['05. price']}<br>
+                    <strong>Change:</strong> {stock_data['09. change']} ({stock_data['10. change percent']})</p>
+                </div>
             """
+
+            # Check for the image in stock_news_json
+            if 'urlToImage' in stock_news_json:
+                image_url = stock_news_json['urlToImage']
+                body_element += f"""
+                <div style='margin-left: 20px;'>
+                    <img src='{image_url}' alt='News Image' width='200' style='border-radius: 10px;'>
+                </div>
+                """
+
+            body_element += "</div>"  # Close the flex container
 
         # Always add the news section
         body_element += "<h3>Related News:</h3><ul>"
 
         # Construct news information
         for key in stock_news_json:
-            # Assuming stock_news_json contains fields like 'source', 'author', 'title', etc.
             if key == 'source':
                 body_element += f"<li><strong>{key.capitalize()}:</strong> {
                     stock_news_json[key]['name']}</li>"
@@ -76,18 +90,7 @@ def create_email_content() -> tuple:
                 body_element += f"<li><strong>{key.capitalize()}:</strong> {
                     stock_news_json[key]}</li>"
 
-        body_element += "</ul>"
-
-        # Check for the image in stock_news_json and place it at the bottom
-        if 'urlToImage' in stock_news_json:
-            image_url = stock_news_json['urlToImage']
-            body_element += f"""
-            <div style='text-align: center;'>
-                <img src='{image_url}' alt='News Image' width='200' style='border-radius: 10px;'>
-            </div>
-            """
-
-        body_element += "<hr>"
+        body_element += "</ul><hr>"
         body.append(body_element)
 
     body.append("</body></html>")
