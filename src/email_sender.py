@@ -71,7 +71,7 @@ def create_email_content() -> tuple:
             if 'urlToImage' in stock_news_json:
                 image_url = stock_news_json['urlToImage']
                 body_element += f"""
-                <div style='margin-left: 50px;'>
+                <div style='margin-left: 100px;'>
                     <img src='{image_url}' alt='News Image' width='200' style='border-radius: 10px;'>
                 </div>
                 """
