@@ -6,6 +6,8 @@
 python program that sends daily stock updates to your email
 </pre>
 
+https://github.com/user-attachments/assets/1ab2bd6f-750a-47dd-bf9b-f6fc1d3d5107
+
 [![PyPI](https://img.shields.io/pypi)](https://pypi.org/project/stockwise-daily/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
