@@ -5,10 +5,10 @@ import os
 ALPHA_VANTAGE_API_KEY = os.getenv('ALPHA_VANTAGE_API_KEY')
 
 
-def fetch_stock_data(stock_symbol: str) -> dict:
+def fetch_stock_data(stock_symbol: str, stock_api_key: str) -> dict:
     """Fetches the latest stock data from Alpha Vantage."""
     url = f'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={
-        stock_symbol}&apikey={ALPHA_VANTAGE_API_KEY}'
+        stock_symbol}&apikey={stock_api_key}'
     response = requests.get(url, timeout=50)
     if response.status_code != 200:
         print(f"Error fetching stock data: {
@@ -23,5 +23,5 @@ def fetch_stock_data(stock_symbol: str) -> dict:
 
 
 if __name__ == "__main__":
-    stock_data = fetch_stock_data('AAPL')
+    stock_data = fetch_stock_data('AAPL', os.getenv('ALPHA_VANTAGE_API_KEY'))
     print(json.dumps(stock_data, indent=4))

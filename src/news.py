@@ -3,18 +3,11 @@ from dotenv import load_dotenv
 import json
 import os
 
-load_dotenv()
 
-NEWS_API_KEY = os.getenv('NEWS_API_KEY')
-ALPHA_VANTAGE_API_KEY = os.getenv('ALPHA_VANTAGE_API_KEY')
-print("NEWS_API_KEY", NEWS_API_KEY)
-print("ALPHA_VANTAGE_API_KEY", ALPHA_VANTAGE_API_KEY)
-
-
-def fetch_news(stock_symbol: str) -> str:
+def fetch_news(stock_symbol: str, news_api_key: str) -> str:
     """Fetches the latest news articles related to the stock symbol."""
     url = f'https://newsapi.org/v2/everything?q={
-        stock_symbol}&apiKey={NEWS_API_KEY}'
+        stock_symbol}&apiKey={news_api_key}'
     response = requests.get(url)
 
     if response.status_code != 200:
@@ -33,5 +26,5 @@ def fetch_news(stock_symbol: str) -> str:
 
 
 if __name__ == "__main__":
-    news_data = fetch_news('AAPL')
+    news_data = fetch_news('AAPL', os.getenv('NEWS_API_KEY'))
     print(json.dumps(news_data, indent=4))
