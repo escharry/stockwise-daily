@@ -46,7 +46,6 @@ def create_email_content() -> tuple:
 
     body.append("<html><body>")
     body.append("<h1>Daily Stock Market Update 🎉</h1>")
-    body.append("<hr>")
 
     for stock_symbol in stock_symbols:
         stock_data = fetch_stock_data(stock_symbol, stocks_api_key)
@@ -69,19 +68,20 @@ def create_email_content() -> tuple:
             <h2>{stock_data['01. symbol']}</h2>
             <p><strong>Open:</strong> {stock_data['02. open']}<br>
             <strong>Price:</strong> {stock_data['05. price']}<br>
-            <strong>Change:</strong> {stock_data['09. change']} (
-            {stock_data['10. change percent']})</p>
+            <strong>Change:</strong> {stock_data['09. change']} ({stock_data['10. change percent']})</p>
 
             <h3>Related News:</h3>
             <ul>
             """
-            for key in stock_news_json:
-                if key == 'source':
-                    body_element += f"<li><strong>{key}:</strong> {
-                        stock_news_json[key]['name']}</li>"
+            for news in stock_news_json:  # Assuming stock_news_json is a list of news articles
+                if 'urlToImage' in news:  # Check if the urlToImage field exists
+                    image_url = news['urlToImage']
+                    body_element += f"<li><strong>{news['title']}</strong><br><img src='{
+                        image_url}' alt='News Image' width='200'><br>{news['description']}<br><a href='{news['url']}'>Read more</a></li>"
                 else:
-                    body_element += f"<li><strong>{
-                        key}:</strong> {stock_news_json[key]}</li>"
+                    body_element += f"<li><strong>{news['title']}</strong><br>{
+                        news['description']}<br><a href='{news['url']}'>Read more</a></li>"
+
             body_element += "</ul><hr>"
             body.append(body_element)
 
@@ -93,4 +93,5 @@ def create_email_content() -> tuple:
 # Main block to send the email
 if __name__ == "__main__":
     subject, body = create_email_content()
-    send_email(subject, body)
+    # send_email(subject, body)
+    print(body)
