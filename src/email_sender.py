@@ -46,6 +46,7 @@ def create_email_content() -> tuple:
 
     body.append("<html><body>")
     body.append("<h1>Daily Stock Market Update 🎉</h1>")
+    body.append("<br><br>")
 
     for stock_symbol in stock_symbols:
         stock_data = fetch_stock_data(stock_symbol, stocks_api_key)
