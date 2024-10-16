@@ -70,8 +70,10 @@ def create_email_content() -> tuple:
             Related News:
             """
             for key in stock_news_json:
-                body_element += f"{key}: {stock_news_json[key]}\n"
-
+                if key == 'source':
+                    body_element += f"{key}: {stock_news_json[key]['name']}\n"
+                else:
+                    body_element += f"{key}: {stock_news_json[key]}\n"
             body.append(body_element + "\n")
 
     body_string = "".join(body)
