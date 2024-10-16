@@ -51,45 +51,40 @@ def create_email_content() -> tuple:
         stock_data = fetch_stock_data(stock_symbol, stocks_api_key)
         stock_news_json = fetch_news(stock_symbol, news_api_key)
 
+        body_element = f"<h2>{stock_symbol}</h2>"
+
+        # Add stock data or error message
         if not stock_data:
-            body_element = f"<h2>Error fetching data for {stock_symbol}</h2>"
-            body_element += "<ul>"
-            for key in stock_news_json:
-                if key == 'source':
-                    body_element += f"<li><strong>{key}:</strong> {
-                        stock_news_json[key]['name']}</li>"
-                elif key == 'urlToImage':
-                    body_element += f"<li><strong>{key}:</strong> <img src='{
-                        stock_news_json[key]}' alt='News Image' width='200'></li>"
-                else:
-                    body_element += f"<li><strong>{
-                        key}:</strong> {stock_news_json[key]}</li>"
-            body_element += "</ul><hr>"
-            body.append(body_element)
+            body_element += "<p>Error fetching stock data.</p>"
         else:
-            body_element = f"""
-            <h2>{stock_data['01. symbol']}</h2>
+            body_element += f"""
             <p><strong>Open:</strong> {stock_data['02. open']}<br>
             <strong>Price:</strong> {stock_data['05. price']}<br>
             <strong>Change:</strong> {stock_data['09. change']} ({stock_data['10. change percent']})</p>
-
-            <h3>Related News:</h3>
-            <ul>
             """
-            for key in stock_news_json:  # Assuming stock_news_json is a list of news articles
-                if key == 'source':  # Check if the source field exists
-                    body_element += f"<li><strong>{key}:</strong> {
-                        stock_news_json[key]['name']}</li>"
-                elif key == 'urlToImage':  # Check if the urlToImage field exists
-                    image_url = stock_news_json[key]
-                    body_element += f"<li><strong>{key}:</strong> <img src='{
-                        image_url}' alt='News Image' width='200'></li>"
-                else:
-                    body_element += f"<li><strong>{
-                        key}:</strong> {stock_news_json[key]}</li>"
 
-            body_element += "</ul><hr>"
-            body.append(body_element)
+        # Always add the news section
+        body_element += "<h3>Related News:</h3><ul>"
+        image_added = False  # To track if we've added an image
+
+        for news in stock_news_json:  # Assuming stock_news_json is a list of news articles
+            body_element += f"<li><strong>{news['title']}</strong><br>"
+            body_element += f"<p>{news['description']
+                                  }<br><a href='{news['url']}'>Read more</a></p></li>"
+
+            # Check for an image in the current news item
+            if 'urlToImage' in news and not image_added:  # Only add the first image found
+                image_url = news['urlToImage']
+                body_element += f"""
+                <div style='text-align: center;'>
+                    <img src='{image_url}' alt='News Image' width='200' style='border-radius: 5px;'>
+                </div>
+                """
+                image_added = True  # Mark that we've added an image
+
+        body_element += "</ul>"
+        body_element += "<hr>"
+        body.append(body_element)
 
     body.append("</body></html>")
     body_string = "".join(body)
