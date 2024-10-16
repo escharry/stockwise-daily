@@ -99,5 +99,4 @@ def create_email_content() -> tuple:
 # Main block to send the email
 if __name__ == "__main__":
     subject, body = create_email_content()
-    # send_email(subject, body)
-    print(body)
+    send_email(subject, body)
