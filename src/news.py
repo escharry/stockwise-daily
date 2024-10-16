@@ -7,6 +7,8 @@ load_dotenv()
 
 NEWS_API_KEY = os.getenv('NEWS_API_KEY')
 ALPHA_VANTAGE_API_KEY = os.getenv('ALPHA_VANTAGE_API_KEY')
+print("NEWS_API_KEY", NEWS_API_KEY)
+print("ALPHA_VANTAGE_API_KEY", ALPHA_VANTAGE_API_KEY)
 
 
 def fetch_news(stock_symbol: str) -> str:
